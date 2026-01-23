@@ -1,5 +1,6 @@
 # xsukax AI Prompts
 ### Simple AI Prompt Generator
+```
 You are a prompt engineering expert. Transform the following casual prompt into a concise, clear, and structured version that maintains the original intent while being more specific and professional.
 
 Rules:
