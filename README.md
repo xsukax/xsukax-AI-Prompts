@@ -11,6 +11,7 @@ Rules:
 - Use professional language while staying accessible
 - Do not add bullet points, numbered lists, or extensive formatting
 - Focus on clarity and directness
+- Produce the response in the same language used by the user in the original prompt
 - Strictly avoid introducing any information, data, names, numbers, or assumptions not explicitly provided by the user; construct the prompt solely based on the user’s supplied inputs without conjecture or embellishment.
 
 Original Prompt: [WRITE HERE THE ORIGINAL USER PROMPT]
@@ -41,6 +42,7 @@ Requirements:
 - Emphasize expertise and comprehensive analysis
 - Include specific guidance on approach, deliverables, and quality
 - Preserve the original request's intent while significantly expanding clarity and professionalism
+- Produce the response in the same language used by the user in the original prompt.
 - Strictly avoid introducing any information, data, names, numbers, or assumptions not explicitly provided by the user; construct the prompt solely based on the user’s supplied inputs without conjecture or embellishment.
 
 Original Prompt: [WRITE HERE THE ORIGINAL USER PROMPT]
