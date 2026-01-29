@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts Editor - xsukax</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; background: #f6f8fa; color: #24292f; line-height: 1.5; }
+        .header { background: #ffffff; border-bottom: 1px solid #d0d7de; padding: 16px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 rgba(27,31,36,0.04); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+        .logo { font-size: 24px; font-weight: 600; color: #24292f; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo::before { content: '✏️'; font-size: 28px; }
+        .brand { font-size: 14px; color: #656d76; font-weight: 400; }
+        .header-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { padding: 8px 16px; background: #0969da; color: #ffffff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+        .btn:hover { background: #0860ca; }
+        .btn:active { background: #0757ba; }
+        .btn:disabled { background: #94d3a2; cursor: not-allowed; opacity: 0.6; }
+        .btn-secondary { background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; }
+        .btn-secondary:hover { background: #f3f4f6; border-color: #d0d7de; }
+        .btn-danger { background: #cf222e; color: #ffffff; }
+        .btn-danger:hover { background: #bc1e2c; }
+        .btn-success { background: #2da44e; color: #ffffff; }
+        .btn-success:hover { background: #2a9548; }
+        .btn-sm { padding: 4px 12px; font-size: 13px; }
+        .main { padding: 24px 0; min-height: calc(100vh - 200px); }
+        .layout { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
+        .sidebar { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; height: fit-content; position: sticky; top: 88px; max-height: calc(100vh - 120px); overflow-y: auto; }
+        .sidebar-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #d0d7de; }
+        .sidebar-section:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .sidebar-title { font-size: 14px; font-weight: 600; color: #24292f; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .load-section { display: flex; flex-direction: column; gap: 8px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; }
+        .input-label { font-size: 13px; font-weight: 500; color: #24292f; }
+        .text-input { padding: 8px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; width: 100%; font-family: inherit; }
+        .text-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .file-input { display: none; }
+        .file-label { padding: 8px 16px; background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .file-label:hover { background: #f3f4f6; border-color: #0969da; }
+        .file-name { font-size: 12px; color: #656d76; margin-top: 4px; word-break: break-all; }
+        .category-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+        .category-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
+        .category-name { flex: 1; font-weight: 500; }
+        .category-count { background: #ffffff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; color: #656d76; margin-right: 8px; }
+        .category-delete { background: transparent; border: none; color: #cf222e; cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 12px; transition: background 0.2s; }
+        .category-delete:hover { background: #fff1f0; }
+        .add-category-form { display: flex; gap: 6px; }
+        .add-category-input { flex: 1; padding: 6px 10px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
+        .add-category-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 2px rgba(9,105,218,0.1); }
+        .prompts-sidebar-list { max-height: 400px; overflow-y: auto; border: 1px solid #d0d7de; border-radius: 6px; }
+        .prompt-item { padding: 12px; border-bottom: 1px solid #d0d7de; cursor: pointer; transition: background 0.2s; }
+        .prompt-item:last-child { border-bottom: none; }
+        .prompt-item:hover { background: #f6f8fa; }
+        .prompt-item.active { background: #ddf4ff; border-left: 3px solid #0969da; }
+        .prompt-item-title { font-size: 14px; font-weight: 500; color: #24292f; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .prompt-item-category { font-size: 11px; color: #656d76; background: #f6f8fa; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .stat-box { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px; text-align: center; }
+        .stat-value { font-size: 24px; font-weight: 600; color: #0969da; }
+        .stat-label { font-size: 12px; color: #656d76; margin-top: 4px; }
+        .editor-panel { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 24px; }
+        .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #d0d7de; }
+        .editor-title { font-size: 20px; font-weight: 600; color: #24292f; }
+        .editor-actions { display: flex; gap: 8px; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 14px; font-weight: 600; color: #24292f; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 16px; font-family: inherit; }
+        .form-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .form-select { width: 100%; padding: 10px 32px 10px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23656d76"><path d="M4.427 7.427l3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"></path></svg>') no-repeat right 10px center; appearance: none; cursor: pointer; }
+        .form-select:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .form-textarea { width: 100%; min-height: 400px; padding: 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; line-height: 1.6; resize: vertical; }
+        .form-textarea:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .char-count { font-size: 12px; color: #656d76; text-align: right; margin-top: 4px; }
+        .empty-editor { text-align: center; padding: 64px 24px; color: #656d76; }
+        .empty-editor::before { content: '📝'; font-size: 64px; display: block; margin-bottom: 16px; opacity: 0.5; }
+        .notification { position: fixed; top: 88px; right: 24px; background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px 20px; box-shadow: 0 8px 24px rgba(140,149,159,0.2); z-index: 1000; display: none; min-width: 300px; }
+        .notification.show { display: flex; animation: slideIn 0.3s ease; }
+        .notification.success { border-left: 4px solid #2da44e; }
+        .notification.error { border-left: 4px solid #cf222e; }
+        .notification.info { border-left: 4px solid #0969da; }
+        @keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .notification-content { flex: 1; }
+        .notification-title { font-weight: 600; margin-bottom: 4px; }
+        .notification-message { font-size: 14px; color: #656d76; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal.show { display: flex; }
+        .modal-content { background: #ffffff; border-radius: 6px; padding: 24px; max-width: 500px; width: 90%; box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+        .modal-header { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+        .modal-body { margin-bottom: 20px; color: #656d76; line-height: 1.6; }
+        .modal-footer { display: flex; gap: 12px; justify-content: flex-end; }
+        .footer { background: #ffffff; border-top: 1px solid #d0d7de; padding: 24px 0; margin-top: 48px; text-align: center; color: #656d76; font-size: 14px; }
+        .footer-link { color: #0969da; text-decoration: none; }
+        .footer-link:hover { text-decoration: underline; }
+        @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; max-height: none; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    Prompts Editor
+                    <span class="brand">by xsukax</span>
+                </a>
+                <div class="header-actions">
+                    <button class="btn btn-success" id="addNewBtn">
+                        <span>+</span> New Prompt
+                    </button>
+                    <button class="btn btn-secondary" id="exportBtn" disabled>
+                        <span>↓</span> Export JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="container">
+            <div class="layout">
+                <aside class="sidebar">
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">📂 Load Data</h3>
+                        <div class="load-section">
+                            <div class="input-group">
+                                <label class="input-label">From URL:</label>
+                                <input type="text" class="text-input" id="jsonUrl" placeholder="GitHub raw JSON URL...">
+                                <button class="btn btn-secondary btn-sm" id="loadUrlBtn">Load from URL</button>
+                            </div>
+                            <div style="text-align: center; color: #656d76; font-size: 12px; margin: 8px 0;">— OR —</div>
+                            <div class="input-group">
+                                <label class="input-label">From File:</label>
+                                <input type="file" class="file-input" id="fileInput" accept=".json">
+                                <label for="fileInput" class="file-label">
+                                    <span>📁</span> Choose JSON File
+                                </label>
+                                <div class="file-name" id="fileName"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">🏷️ Categories</h3>
+                        <div class="category-list" id="categoryList">
+                            <div style="padding: 12px; text-align: center; color: #656d76; font-size: 12px;">
+                                Load prompts to manage categories
+                            </div>
+                        </div>
+                        <div class="add-category-form">
+                            <input type="text" class="add-category-input" id="newCategoryInput" placeholder="New category...">
+                            <button class="btn btn-sm" id="addCategoryBtn" style="padding: 6px 12px;">+</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">📊 Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-value" id="totalPrompts">0</div>
+                                <div class="stat-label">Prompts</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value" id="totalCategories">0</div>
+                                <div class="stat-label">Categories</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3 class="sidebar-title">📋 All Prompts</h3>
+                        <div class="prompts-sidebar-list" id="promptsList">
+                            <div style="padding: 24px; text-align: center; color: #656d76; font-size: 13px;">
+                                No prompts loaded yet
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <main class="editor-panel">
+                    <div id="editorContent">
+                        <div class="empty-editor">
+                            <h2>Welcome to Prompts Editor</h2>
+                            <p>Load a JSON file or create a new prompt to get started.</p>
+                            <p style="margin-top: 12px; font-size: 13px;">JSON format: <code>[{"title": "...", "prompt": "...", "category": "General"}]</code></p>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Crafted with ❤️ by <a href="#" class="footer-link">xsukax</a> | Single-Page Prompts Editor</p>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <div class="notification-title" id="notificationTitle"></div>
+            <div class="notification-message" id="notificationMessage"></div>
+        </div>
+    </div>
+
+    <!-- Delete Prompt Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">Confirm Deletion</div>
+            <div class="modal-body">
+                Are you sure you want to delete this prompt? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reassign Category Modal -->
+    <div class="modal" id="reassignModal">
+        <div class="modal-content">
+            <div class="modal-header">Reassign Category</div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px;">This category contains <strong><span id="reassignCount">0</span> prompt(s)</strong>. Please select a category to move them to:</p>
+                <label class="form-label">New Category:</label>
+                <select class="form-select" id="reassignSelect"></select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelReassignBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmReassignBtn">Delete & Reassign</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let prompts = [];
+        let categories = ['General'];
+        let currentEditIndex = -1;
+        let deleteIndex = -1;
+        let categoryToDelete = null;
+
+        // Elements
+        const jsonUrlInput = document.getElementById('jsonUrl');
+        const loadUrlBtn = document.getElementById('loadUrlBtn');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const addNewBtn = document.getElementById('addNewBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const editorContent = document.getElementById('editorContent');
+        const promptsList = document.getElementById('promptsList');
+        const categoryList = document.getElementById('categoryList');
+        const newCategoryInput = document.getElementById('newCategoryInput');
+        const addCategoryBtn = document.getElementById('addCategoryBtn');
+        const totalPromptsSpan = document.getElementById('totalPrompts');
+        const totalCategoriesSpan = document.getElementById('totalCategories');
+        const notification = document.getElementById('notification');
+        const deleteModal = document.getElementById('deleteModal');
+        const reassignModal = document.getElementById('reassignModal');
+
+        // Event listeners
+        loadUrlBtn.addEventListener('click', loadFromUrl);
+        fileInput.addEventListener('change', loadFromFile);
+        addNewBtn.addEventListener('click', createNewPrompt);
+        exportBtn.addEventListener('click', exportToJson);
+        addCategoryBtn.addEventListener('click', addCategory);
+        document.getElementById('cancelDeleteBtn').addEventListener('click', () => deleteModal.classList.remove('show'));
+        document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+        document.getElementById('cancelReassignBtn').addEventListener('click', () => reassignModal.classList.remove('show'));
+        document.getElementById('confirmReassignBtn').addEventListener('click', confirmReassign);
+
+        jsonUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadFromUrl();
+        });
+
+        newCategoryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addCategory();
+        });
+
+        async function loadFromUrl() {
+            const url = jsonUrlInput.value.trim();
+            if (!url) {
+                showNotification('Error', 'Please enter a valid URL', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+                loadPromptsData(data);
+                showNotification('Success', 'Prompts loaded from URL', 'success');
+            } catch (error) {
+                showNotification('Error', `Failed to load: ${error.message}`, 'error');
+            }
+        }
+
+        function loadFromFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            fileName.textContent = file.name;
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    loadPromptsData(data);
+                    showNotification('Success', `Loaded ${file.name}`, 'success');
+                } catch (error) {
+                    showNotification('Error', `Invalid JSON: ${error.message}`, 'error');
+                }
+            };
+            
+            reader.onerror = () => {
+                showNotification('Error', 'Failed to read file', 'error');
+            };
+            
+            reader.readAsText(file);
+        }
+
+        function loadPromptsData(data) {
+            if (!Array.isArray(data)) {
+                showNotification('Error', 'JSON must be an array', 'error');
+                return;
+            }
+
+            prompts = data.map((item, index) => ({
+                title: item.title || `Untitled Prompt ${index + 1}`,
+                prompt: item.prompt || '',
+                category: item.category || 'General'
+            }));
+
+            extractCategories();
+            updateUI();
+            exportBtn.disabled = false;
+            
+            if (prompts.length > 0) {
+                editPrompt(0);
+            }
+        }
+
+        function extractCategories() {
+            const categorySet = new Set(prompts.map(p => p.category));
+            categories = Array.from(categorySet).sort();
+            if (categories.length === 0) {
+                categories = ['General'];
+            }
+        }
+
+        function addCategory() {
+            const newCategory = newCategoryInput.value.trim();
+            
+            if (!newCategory) {
+                showNotification('Error', 'Category name cannot be empty', 'error');
+                return;
+            }
+
+            if (categories.includes(newCategory)) {
+                showNotification('Error', 'Category already exists', 'error');
+                return;
+            }
+
+            categories.push(newCategory);
+            categories.sort();
+            newCategoryInput.value = '';
+            updateCategoryList();
+            updateStats();
+            showNotification('Success', `Category "${newCategory}" added`, 'success');
+        }
+
+        function deleteCategory(categoryName) {
+            const promptsInCategory = prompts.filter(p => p.category === categoryName);
+            
+            if (categories.length === 1) {
+                showNotification('Error', 'Cannot delete the last category', 'error');
+                return;
+            }
+
+            if (promptsInCategory.length === 0) {
+                // No prompts in category, just delete it
+                categories = categories.filter(c => c !== categoryName);
+                updateUI();
+                showNotification('Success', `Category "${categoryName}" deleted`, 'success');
+            } else {
+                // Show reassignment modal
+                categoryToDelete = categoryName;
+                document.getElementById('reassignCount').textContent = promptsInCategory.length;
+                
+                const reassignSelect = document.getElementById('reassignSelect');
+                reassignSelect.innerHTML = categories
+                    .filter(c => c !== categoryName)
+                    .map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
+                    .join('');
+                
+                reassignModal.classList.add('show');
+            }
+        }
+
+        function confirmReassign() {
+            const newCategory = document.getElementById('reassignSelect').value;
+            
+            prompts.forEach(prompt => {
+                if (prompt.category === categoryToDelete) {
+                    prompt.category = newCategory;
+                }
+            });
+
+            categories = categories.filter(c => c !== categoryToDelete);
+            reassignModal.classList.remove('show');
+            
+            // If currently editing a prompt from deleted category, refresh the editor
+            if (currentEditIndex !== -1 && prompts[currentEditIndex]) {
+                editPrompt(currentEditIndex);
+            }
+            
+            updateUI();
+            showNotification('Success', `Category reassigned and deleted`, 'success');
+            categoryToDelete = null;
+        }
+
+        function createNewPrompt() {
+            prompts.push({
+                title: `New Prompt ${prompts.length + 1}`,
+                prompt: '',
+                category: categories[0] || 'General'
+            });
+            updateUI();
+            exportBtn.disabled = false;
+            editPrompt(prompts.length - 1);
+            showNotification('Success', 'New prompt created', 'success');
+        }
+
+        function editPrompt(index) {
+            currentEditIndex = index;
+            const prompt = prompts[index];
+
+            const categoryOptions = categories.map(cat => 
+                `<option value="${escapeHtml(cat)}" ${cat === prompt.category ? 'selected' : ''}>${escapeHtml(cat)}</option>`
+            ).join('');
+
+            editorContent.innerHTML = `
+                <div class="editor-header">
+                    <div class="editor-title">Edit Prompt</div>
+                    <div class="editor-actions">
+                        <button class="btn btn-success btn-sm" id="saveBtn">💾 Save Changes</button>
+                        <button class="btn btn-danger btn-sm" id="deleteBtn">🗑️ Delete</button>
+                    </div>
+                </div>
+                <form id="editorForm">
+                    <div class="form-group">
+                        <label class="form-label">Prompt Title</label>
+                        <input type="text" class="form-input" id="titleInput" value="${escapeHtml(prompt.title)}" placeholder="Enter prompt title..." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="categoryInput">${categoryOptions}</select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Prompt Content</label>
+                        <textarea class="form-textarea" id="promptInput" placeholder="Enter your prompt content here..." required>${escapeHtml(prompt.prompt)}</textarea>
+                        <div class="char-count">
+                            <span id="charCount">${prompt.prompt.length}</span> characters |
+                            <span id="lineCount">${prompt.prompt.split('\n').length}</span> lines
+                        </div>
+                    </div>
+                </form>
+            `;
+
+            document.getElementById('saveBtn').addEventListener('click', savePrompt);
+            document.getElementById('deleteBtn').addEventListener('click', () => showDeleteModal(index));
+            document.getElementById('promptInput').addEventListener('input', updateCharCount);
+            
+            updatePromptsList();
+        }
+
+        function savePrompt() {
+            const title = document.getElementById('titleInput').value.trim();
+            const category = document.getElementById('categoryInput').value;
+            const promptText = document.getElementById('promptInput').value;
+
+            if (!title) {
+                showNotification('Error', 'Title cannot be empty', 'error');
+                return;
+            }
+
+            prompts[currentEditIndex] = { title, prompt: promptText, category };
+            updateUI();
+            showNotification('Success', 'Prompt saved successfully', 'success');
+        }
+
+        function showDeleteModal(index) {
+            deleteIndex = index;
+            deleteModal.classList.add('show');
+        }
+
+        function confirmDelete() {
+            if (deleteIndex !== -1) {
+                prompts.splice(deleteIndex, 1);
+                deleteModal.classList.remove('show');
+                deleteIndex = -1;
+
+                if (prompts.length === 0) {
+                    currentEditIndex = -1;
+                    editorContent.innerHTML = `
+                        <div class="empty-editor">
+                            <h2>No Prompts</h2>
+                            <p>All prompts have been deleted. Create a new one to continue.</p>
+                        </div>
+                    `;
+                    exportBtn.disabled = true;
+                } else {
+                    const newIndex = Math.min(currentEditIndex, prompts.length - 1);
+                    editPrompt(newIndex);
+                }
+
+                extractCategories();
+                updateUI();
+                showNotification('Success', 'Prompt deleted', 'success');
+            }
+        }
+
+        function updateCharCount() {
+            const text = document.getElementById('promptInput').value;
+            document.getElementById('charCount').textContent = text.length;
+            document.getElementById('lineCount').textContent = text.split('\n').length;
+        }
+
+        function updateUI() {
+            updateStats();
+            updatePromptsList();
+            updateCategoryList();
+        }
+
+        function updateStats() {
+            totalPromptsSpan.textContent = prompts.length;
+            totalCategoriesSpan.textContent = categories.length;
+        }
+
+        function updateCategoryList() {
+            if (categories.length === 0) {
+                categoryList.innerHTML = '<div style="padding: 12px; text-align: center; color: #656d76; font-size: 12px;">No categories</div>';
+                return;
+            }
+
+            const categoryCounts = {};
+            prompts.forEach(p => {
+                categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
+            });
+
+            categoryList.innerHTML = categories.map(cat => `
+                <div class="category-item">
+                    <span class="category-name">${escapeHtml(cat)}</span>
+                    <span class="category-count">${categoryCounts[cat] || 0}</span>
+                    <button class="category-delete" data-category="${escapeHtml(cat)}">×</button>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.category-delete').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    deleteCategory(btn.dataset.category);
+                });
+            });
+        }
+
+        function updatePromptsList() {
+            if (prompts.length === 0) {
+                promptsList.innerHTML = '<div style="padding: 24px; text-align: center; color: #656d76; font-size: 13px;">No prompts loaded yet</div>';
+                return;
+            }
+
+            promptsList.innerHTML = prompts.map((p, i) => `
+                <div class="prompt-item ${i === currentEditIndex ? 'active' : ''}" data-index="${i}">
+                    <div class="prompt-item-title">${escapeHtml(p.title)}</div>
+                    <div class="prompt-item-category">${escapeHtml(p.category)}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.prompt-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const index = parseInt(item.dataset.index);
+                    editPrompt(index);
+                });
+            });
+        }
+
+        function exportToJson() {
+            if (prompts.length === 0) {
+                showNotification('Error', 'No prompts to export', 'error');
+                return;
+            }
+
+            const dataStr = JSON.stringify(prompts, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `prompts_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('Success', 'JSON file exported successfully', 'success');
+        }
+
+        function showNotification(title, message, type = 'info') {
+            document.getElementById('notificationTitle').textContent = title;
+            document.getElementById('notificationMessage').textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

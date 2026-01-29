@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts Viewer - xsukax</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; background: #f6f8fa; color: #24292f; line-height: 1.5; }
+        .header { background: #ffffff; border-bottom: 1px solid #d0d7de; padding: 16px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 0 rgba(27,31,36,0.04); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; }
+        .logo { font-size: 24px; font-weight: 600; color: #24292f; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo::before { content: '📝'; font-size: 28px; }
+        .brand { font-size: 14px; color: #656d76; font-weight: 400; }
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+        .input-group { position: relative; display: flex; align-items: center; flex: 1; min-width: 300px; }
+        .json-url { padding: 8px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; width: 100%; font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+        .json-url:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .btn { padding: 8px 16px; background: #0969da; color: #ffffff; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+        .btn:hover { background: #0860ca; }
+        .btn:active { background: #0757ba; }
+        .btn:disabled { background: #94d3a2; cursor: not-allowed; opacity: 0.6; }
+        .btn-secondary { background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; }
+        .btn-secondary:hover { background: #f3f4f6; border-color: #d0d7de; }
+        .search-box { padding: 8px 12px 8px 36px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; width: 300px; max-width: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23656d76"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.5 4.5 0 1 0-8.997.002A4.5 4.5 0 0 0 11.5 7Z"></path></svg>') no-repeat 12px center; }
+        .search-box:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .select-box { padding: 8px 32px 8px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23656d76"><path d="M4.427 7.427l3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"></path></svg>') no-repeat right 10px center; appearance: none; cursor: pointer; min-width: 150px; }
+        .select-box:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .main { padding: 24px 0; min-height: calc(100vh - 200px); }
+        .info-banner { background: #ddf4ff; border: 1px solid #54aeff; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #0969da; }
+        .info-banner::before { content: 'ℹ️'; font-size: 20px; }
+        .stats { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; margin-bottom: 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+        .stat-item { display: flex; align-items: center; gap: 8px; }
+        .stat-label { color: #656d76; font-size: 14px; }
+        .stat-value { font-weight: 600; font-size: 16px; color: #24292f; }
+        .categories-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+        .category-chip { padding: 6px 16px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 20px; font-size: 13px; color: #24292f; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .category-chip:hover { background: #ffffff; border-color: #0969da; }
+        .category-chip.active { background: #ddf4ff; border-color: #0969da; color: #0969da; font-weight: 500; }
+        .category-chip-count { background: #ffffff; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 600; }
+        .prompts-list { display: grid; gap: 16px; }
+        .prompt-card { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 20px; cursor: pointer; transition: all 0.2s; }
+        .prompt-card:hover { border-color: #0969da; box-shadow: 0 3px 12px rgba(140,149,159,0.15); transform: translateY(-2px); }
+        .prompt-card.active { border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .prompt-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+        .prompt-title { font-size: 18px; font-weight: 600; color: #0969da; display: flex; align-items: center; gap: 8px; flex: 1; }
+        .prompt-title::before { content: '▸'; font-size: 14px; transition: transform 0.2s; }
+        .prompt-card.active .prompt-title::before { transform: rotate(90deg); }
+        .category-badge { padding: 4px 10px; background: #ddf4ff; border: 1px solid #54aeff; border-radius: 12px; font-size: 11px; font-weight: 600; color: #0969da; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        .prompt-excerpt { color: #656d76; font-size: 14px; line-height: 1.6; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .prompt-meta { display: flex; gap: 16px; font-size: 12px; color: #656d76; }
+        .prompt-full { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; margin-top: 16px; display: none; }
+        .prompt-card.active .prompt-full { display: block; animation: slideDown 0.3s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #d0d7de; }
+        .code-label { font-size: 12px; font-weight: 600; color: #656d76; text-transform: uppercase; letter-spacing: 0.5px; }
+        .copy-btn { padding: 4px 12px; font-size: 12px; background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: #ffffff; border-color: #0969da; color: #0969da; }
+        .copy-btn.copied { background: #2da44e; color: #ffffff; border-color: #2da44e; }
+        .prompt-content { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; font-size: 13px; line-height: 1.6; color: #24292f; white-space: pre-wrap; word-wrap: break-word; max-height: 600px; overflow-y: auto; }
+        .loading { text-align: center; padding: 48px; color: #656d76; }
+        .loading::before { content: '⏳'; font-size: 48px; display: block; margin-bottom: 16px; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .error { background: #fff1f0; border: 1px solid #ffc1ba; color: #cf222e; padding: 16px; border-radius: 6px; margin: 24px 0; display: flex; align-items: center; gap: 12px; }
+        .error::before { content: '⚠️'; font-size: 24px; }
+        .empty-state { text-align: center; padding: 64px 24px; color: #656d76; }
+        .empty-state::before { content: '📭'; font-size: 64px; display: block; margin-bottom: 16px; opacity: 0.5; }
+        .footer { background: #ffffff; border-top: 1px solid #d0d7de; padding: 24px 0; margin-top: 48px; text-align: center; color: #656d76; font-size: 14px; }
+        .footer-link { color: #0969da; text-decoration: none; }
+        .footer-link:hover { text-decoration: underline; }
+        @media (max-width: 768px) { .input-group { min-width: 100%; } .controls { width: 100%; } .search-box { width: 100%; } .stats { flex-direction: column; gap: 12px; align-items: flex-start; } .prompt-header { flex-direction: column; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    Prompts Viewer
+                    <span class="brand">by xsukax</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="container">
+            <div class="info-banner" id="infoBanner" style="display: none;">
+                <div>
+                    <strong>Auto-loaded from default source</strong> — You can load prompts from any GitHub raw JSON URL below.
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="input-group">
+                    <input type="text" class="json-url" id="jsonUrl" placeholder="Enter GitHub raw JSON URL..." value="https://raw.githubusercontent.com/xsukax/xsukax-AI-Prompts/refs/heads/main/prompts.json">
+                </div>
+                <button class="btn" id="loadBtn">Load Prompts</button>
+                <button class="btn btn-secondary" id="reloadBtn" style="display: none;">🔄 Reload</button>
+            </div>
+
+            <div class="controls" style="margin-top: 0;">
+                <select class="select-box" id="categoryFilter" style="display: none;">
+                    <option value="">All Categories</option>
+                </select>
+                <input type="text" class="search-box" id="searchBox" placeholder="Search prompts..." style="flex: 1;">
+            </div>
+
+            <div class="stats" id="stats" style="display: none;">
+                <div class="stat-item">
+                    <span class="stat-label">Total Prompts:</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Categories:</span>
+                    <span class="stat-value" id="categoryCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Showing:</span>
+                    <span class="stat-value" id="showingCount">0</span>
+                </div>
+            </div>
+
+            <div class="categories-filter" id="categoriesFilter" style="display: none;"></div>
+
+            <div id="content">
+                <div class="loading">Loading prompts from default source...</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>Crafted with ❤️ by <a href="#" class="footer-link">xsukax</a> | Single-Page Prompts Viewer</p>
+        </div>
+    </footer>
+
+    <script>
+        let allPrompts = [];
+        let filteredPrompts = [];
+        let categories = [];
+        let activeCategory = '';
+        let isAutoLoaded = false;
+
+        const DEFAULT_URL = 'https://raw.githubusercontent.com/xsukax/xsukax-AI-Prompts/refs/heads/main/prompts.json';
+
+        const jsonUrlInput = document.getElementById('jsonUrl');
+        const loadBtn = document.getElementById('loadBtn');
+        const reloadBtn = document.getElementById('reloadBtn');
+        const searchBox = document.getElementById('searchBox');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const categoriesFilter = document.getElementById('categoriesFilter');
+        const contentDiv = document.getElementById('content');
+        const statsDiv = document.getElementById('stats');
+        const infoBanner = document.getElementById('infoBanner');
+        const totalCountSpan = document.getElementById('totalCount');
+        const categoryCountSpan = document.getElementById('categoryCount');
+        const showingCountSpan = document.getElementById('showingCount');
+
+        loadBtn.addEventListener('click', () => loadPrompts(false));
+        reloadBtn.addEventListener('click', () => loadPrompts(false));
+        searchBox.addEventListener('input', filterPrompts);
+        categoryFilter.addEventListener('change', filterPrompts);
+
+        jsonUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadPrompts(false);
+        });
+
+        // Auto-load prompts on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPrompts(true);
+        });
+
+        async function loadPrompts(isAutoLoad = false) {
+            const url = jsonUrlInput.value.trim();
+            
+            if (!url) {
+                showError('Please enter a valid JSON URL');
+                return;
+            }
+
+            showLoading(isAutoLoad);
+            isAutoLoaded = isAutoLoad;
+
+            try {
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('JSON must be an array of prompt objects');
+                }
+
+                allPrompts = data.map((item, index) => ({
+                    id: index,
+                    title: item.title || `Prompt ${index + 1}`,
+                    prompt: item.prompt || '',
+                    category: item.category || 'General',
+                    excerpt: generateExcerpt(item.prompt || '')
+                }));
+
+                extractCategories();
+                filteredPrompts = [...allPrompts];
+                displayPrompts();
+                updateStats();
+                statsDiv.style.display = 'flex';
+                categoryFilter.style.display = 'block';
+                categoriesFilter.style.display = 'flex';
+                reloadBtn.style.display = 'inline-flex';
+
+                // Show info banner only if auto-loaded from default URL
+                if (isAutoLoad && url === DEFAULT_URL) {
+                    infoBanner.style.display = 'flex';
+                }
+
+            } catch (error) {
+                showError(`Failed to load prompts: ${error.message}`);
+                console.error('Error loading prompts:', error);
+                
+                // Hide info banner on error
+                infoBanner.style.display = 'none';
+            }
+        }
+
+        function extractCategories() {
+            const categorySet = new Set(allPrompts.map(p => p.category));
+            categories = Array.from(categorySet).sort();
+            
+            // Update category filter dropdown
+            categoryFilter.innerHTML = '<option value="">All Categories</option>' +
+                categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
+            
+            // Update category chips
+            const categoryCounts = {};
+            allPrompts.forEach(p => {
+                categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
+            });
+
+            categoriesFilter.innerHTML = `
+                <div class="category-chip ${activeCategory === '' ? 'active' : ''}" data-category="">
+                    All <span class="category-chip-count">${allPrompts.length}</span>
+                </div>
+            ` + categories.map(cat => `
+                <div class="category-chip ${activeCategory === cat ? 'active' : ''}" data-category="${escapeHtml(cat)}">
+                    ${escapeHtml(cat)} <span class="category-chip-count">${categoryCounts[cat]}</span>
+                </div>
+            `).join('');
+
+            // Add click handlers to chips
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    activeCategory = chip.dataset.category;
+                    categoryFilter.value = activeCategory;
+                    filterPrompts();
+                });
+            });
+        }
+
+        function generateExcerpt(text, maxLength = 200) {
+            const cleaned = text.replace(/\s+/g, ' ').trim();
+            if (cleaned.length <= maxLength) return cleaned;
+            return cleaned.substring(0, maxLength) + '...';
+        }
+
+        function filterPrompts() {
+            const query = searchBox.value.toLowerCase().trim();
+            const selectedCategory = categoryFilter.value;
+            activeCategory = selectedCategory;
+            
+            filteredPrompts = allPrompts.filter(prompt => {
+                const matchesSearch = !query || 
+                    prompt.title.toLowerCase().includes(query) ||
+                    prompt.prompt.toLowerCase().includes(query);
+                
+                const matchesCategory = !selectedCategory || prompt.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            displayPrompts();
+            updateStats();
+            updateCategoryChips();
+        }
+
+        function updateCategoryChips() {
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                chip.classList.toggle('active', chip.dataset.category === activeCategory);
+            });
+        }
+
+        function displayPrompts() {
+            if (filteredPrompts.length === 0) {
+                contentDiv.innerHTML = '<div class="empty-state"><h2>No prompts found</h2><p>Try a different search query or category filter.</p></div>';
+                return;
+            }
+
+            const promptsHTML = filteredPrompts.map(prompt => `
+                <div class="prompt-card" data-id="${prompt.id}">
+                    <div class="prompt-header">
+                        <div class="prompt-title">${escapeHtml(prompt.title)}</div>
+                        <div class="category-badge">${escapeHtml(prompt.category)}</div>
+                    </div>
+                    <div class="prompt-excerpt">${escapeHtml(prompt.excerpt)}</div>
+                    <div class="prompt-meta">
+                        <span>📊 ${prompt.prompt.length} characters</span>
+                        <span>📄 ${prompt.prompt.split('\n').length} lines</span>
+                    </div>
+                    <div class="prompt-full">
+                        <div class="code-header">
+                            <span class="code-label">Full Prompt</span>
+                            <button class="copy-btn" data-id="${prompt.id}">Copy</button>
+                        </div>
+                        <div class="prompt-content">${escapeHtml(prompt.prompt)}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            contentDiv.innerHTML = `<div class="prompts-list">${promptsHTML}</div>`;
+
+            // Add click handlers
+            document.querySelectorAll('.prompt-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('copy-btn')) {
+                        copyPrompt(e.target.dataset.id);
+                        return;
+                    }
+                    togglePrompt(card);
+                });
+            });
+        }
+
+        function togglePrompt(card) {
+            const wasActive = card.classList.contains('active');
+            
+            // Close all other cards
+            document.querySelectorAll('.prompt-card').forEach(c => {
+                c.classList.remove('active');
+            });
+            
+            // Toggle current card
+            if (!wasActive) {
+                card.classList.add('active');
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function copyPrompt(id) {
+            const prompt = allPrompts.find(p => p.id == id);
+            if (!prompt) return;
+
+            navigator.clipboard.writeText(prompt.prompt).then(() => {
+                const btn = document.querySelector(`.copy-btn[data-id="${id}"]`);
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+            });
+        }
+
+        function updateStats() {
+            totalCountSpan.textContent = allPrompts.length;
+            categoryCountSpan.textContent = categories.length;
+            showingCountSpan.textContent = filteredPrompts.length;
+        }
+
+        function showLoading(isAutoLoad) {
+            const message = isAutoLoad ? 'Loading prompts from default source...' : 'Loading prompts...';
+            contentDiv.innerHTML = `<div class="loading">${message}</div>`;
+            statsDiv.style.display = 'none';
+            categoryFilter.style.display = 'none';
+            categoriesFilter.style.display = 'none';
+            reloadBtn.style.display = 'none';
+            infoBanner.style.display = 'none';
+        }
+
+        function showError(message) {
+            contentDiv.innerHTML = `<div class="error"><div><strong>Error:</strong> ${escapeHtml(message)}</div></div>`;
+            statsDiv.style.display = 'none';
+            categoryFilter.style.display = 'none';
+            categoriesFilter.style.display = 'none';
+            reloadBtn.style.display = 'none';
+            infoBanner.style.display = 'none';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
