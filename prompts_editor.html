@@ -26,6 +26,8 @@
         .btn-success:hover { background: #2a9548; }
         .btn-sm { padding: 4px 12px; font-size: 13px; }
         .main { padding: 24px 0; min-height: calc(100vh - 200px); }
+        .info-banner { background: #ddf4ff; border: 1px solid #54aeff; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: #0969da; }
+        .info-banner::before { content: 'ℹ️'; font-size: 20px; }
         .layout { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
         .sidebar { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 16px; height: fit-content; position: sticky; top: 88px; max-height: calc(100vh - 120px); overflow-y: auto; }
         .sidebar-section { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #d0d7de; }
@@ -40,26 +42,27 @@
         .file-label { padding: 8px 16px; background: #f6f8fa; color: #24292f; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; text-align: center; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
         .file-label:hover { background: #f3f4f6; border-color: #0969da; }
         .file-name { font-size: 12px; color: #656d76; margin-top: 4px; word-break: break-all; }
-        .category-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-        .category-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
-        .category-name { flex: 1; font-weight: 500; }
-        .category-count { background: #ffffff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; color: #656d76; margin-right: 8px; }
-        .category-delete { background: transparent; border: none; color: #cf222e; cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 12px; transition: background 0.2s; }
-        .category-delete:hover { background: #fff1f0; }
-        .add-category-form { display: flex; gap: 6px; }
-        .add-category-input { flex: 1; padding: 6px 10px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
-        .add-category-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 2px rgba(9,105,218,0.1); }
+        .item-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; max-height: 200px; overflow-y: auto; }
+        .list-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
+        .item-name { flex: 1; font-weight: 500; }
+        .item-count { background: #ffffff; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; color: #656d76; margin-right: 8px; }
+        .item-delete { background: transparent; border: none; color: #cf222e; cursor: pointer; padding: 4px 8px; border-radius: 4px; font-size: 12px; transition: background 0.2s; }
+        .item-delete:hover { background: #fff1f0; }
+        .add-form { display: flex; gap: 6px; }
+        .add-input { flex: 1; padding: 6px 10px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 13px; }
+        .add-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 2px rgba(9,105,218,0.1); }
         .prompts-sidebar-list { max-height: 400px; overflow-y: auto; border: 1px solid #d0d7de; border-radius: 6px; }
         .prompt-item { padding: 12px; border-bottom: 1px solid #d0d7de; cursor: pointer; transition: background 0.2s; }
         .prompt-item:last-child { border-bottom: none; }
         .prompt-item:hover { background: #f6f8fa; }
         .prompt-item.active { background: #ddf4ff; border-left: 3px solid #0969da; }
-        .prompt-item-title { font-size: 14px; font-weight: 500; color: #24292f; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .prompt-item-category { font-size: 11px; color: #656d76; background: #f6f8fa; padding: 2px 8px; border-radius: 10px; display: inline-block; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .prompt-item-title { font-size: 14px; font-weight: 500; color: #24292f; margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .prompt-item-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+        .prompt-item-badge { font-size: 10px; color: #656d76; background: #f6f8fa; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
         .stat-box { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px; text-align: center; }
-        .stat-value { font-size: 24px; font-weight: 600; color: #0969da; }
-        .stat-label { font-size: 12px; color: #656d76; margin-top: 4px; }
+        .stat-value { font-size: 20px; font-weight: 600; color: #0969da; }
+        .stat-label { font-size: 11px; color: #656d76; margin-top: 4px; }
         .editor-panel { background: #ffffff; border: 1px solid #d0d7de; border-radius: 6px; padding: 24px; }
         .editor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #d0d7de; }
         .editor-title { font-size: 20px; font-weight: 600; color: #24292f; }
@@ -68,6 +71,7 @@
         .form-label { display: block; font-size: 14px; font-weight: 600; color: #24292f; margin-bottom: 8px; }
         .form-input { width: 100%; padding: 10px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 16px; font-family: inherit; }
         .form-input:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
         .form-select { width: 100%; padding: 10px 32px 10px 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; background: #ffffff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23656d76"><path d="M4.427 7.427l3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427z"></path></svg>') no-repeat right 10px center; appearance: none; cursor: pointer; }
         .form-select:focus { outline: none; border-color: #0969da; box-shadow: 0 0 0 3px rgba(9,105,218,0.1); }
         .form-textarea { width: 100%; min-height: 400px; padding: 12px; border: 1px solid #d0d7de; border-radius: 6px; font-size: 14px; font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; line-height: 1.6; resize: vertical; }
@@ -93,7 +97,7 @@
         .footer { background: #ffffff; border-top: 1px solid #d0d7de; padding: 24px 0; margin-top: 48px; text-align: center; color: #656d76; font-size: 14px; }
         .footer-link { color: #0969da; text-decoration: none; }
         .footer-link:hover { text-decoration: underline; }
-        @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; max-height: none; } }
+        @media (max-width: 1024px) { .layout { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; max-height: none; } .form-row { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
@@ -118,6 +122,12 @@
 
     <div class="main">
         <div class="container">
+            <div class="info-banner" id="infoBanner" style="display: none;">
+                <div>
+                    <strong>Auto-loaded from default source</strong> — Data has been automatically loaded. You can also load from URL or file below.
+                </div>
+            </div>
+
             <div class="layout">
                 <aside class="sidebar">
                     <div class="sidebar-section">
@@ -125,7 +135,7 @@
                         <div class="load-section">
                             <div class="input-group">
                                 <label class="input-label">From URL:</label>
-                                <input type="text" class="text-input" id="jsonUrl" placeholder="GitHub raw JSON URL...">
+                                <input type="text" class="text-input" id="jsonUrl" placeholder="GitHub raw JSON URL..." value="https://raw.githubusercontent.com/xsukax/xsukax-AI-Prompts/refs/heads/main/prompts.json">
                                 <button class="btn btn-secondary btn-sm" id="loadUrlBtn">Load from URL</button>
                             </div>
                             <div style="text-align: center; color: #656d76; font-size: 12px; margin: 8px 0;">— OR —</div>
@@ -141,14 +151,27 @@
                     </div>
 
                     <div class="sidebar-section">
+                        <h3 class="sidebar-title">📌 Types</h3>
+                        <div class="item-list" id="typeList">
+                            <div style="padding: 12px; text-align: center; color: #656d76; font-size: 12px;">
+                                Load prompts to manage types
+                            </div>
+                        </div>
+                        <div class="add-form">
+                            <input type="text" class="add-input" id="newTypeInput" placeholder="New type...">
+                            <button class="btn btn-sm" id="addTypeBtn" style="padding: 6px 12px;">+</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
                         <h3 class="sidebar-title">🏷️ Categories</h3>
-                        <div class="category-list" id="categoryList">
+                        <div class="item-list" id="categoryList">
                             <div style="padding: 12px; text-align: center; color: #656d76; font-size: 12px;">
                                 Load prompts to manage categories
                             </div>
                         </div>
-                        <div class="add-category-form">
-                            <input type="text" class="add-category-input" id="newCategoryInput" placeholder="New category...">
+                        <div class="add-form">
+                            <input type="text" class="add-input" id="newCategoryInput" placeholder="New category...">
                             <button class="btn btn-sm" id="addCategoryBtn" style="padding: 6px 12px;">+</button>
                         </div>
                     </div>
@@ -161,6 +184,10 @@
                                 <div class="stat-label">Prompts</div>
                             </div>
                             <div class="stat-box">
+                                <div class="stat-value" id="totalTypes">0</div>
+                                <div class="stat-label">Types</div>
+                            </div>
+                            <div class="stat-box">
                                 <div class="stat-value" id="totalCategories">0</div>
                                 <div class="stat-label">Categories</div>
                             </div>
@@ -171,7 +198,7 @@
                         <h3 class="sidebar-title">📋 All Prompts</h3>
                         <div class="prompts-sidebar-list" id="promptsList">
                             <div style="padding: 24px; text-align: center; color: #656d76; font-size: 13px;">
-                                No prompts loaded yet
+                                Loading prompts...
                             </div>
                         </div>
                     </div>
@@ -180,9 +207,8 @@
                 <main class="editor-panel">
                     <div id="editorContent">
                         <div class="empty-editor">
-                            <h2>Welcome to Prompts Editor</h2>
-                            <p>Load a JSON file or create a new prompt to get started.</p>
-                            <p style="margin-top: 12px; font-size: 13px;">JSON format: <code>[{"title": "...", "prompt": "...", "category": "General"}]</code></p>
+                            <h2>Loading...</h2>
+                            <p>Please wait while we load the prompts from the default source.</p>
                         </div>
                     </div>
                 </main>
@@ -196,7 +222,6 @@
         </div>
     </footer>
 
-    <!-- Notification -->
     <div class="notification" id="notification">
         <div class="notification-content">
             <div class="notification-title" id="notificationTitle"></div>
@@ -204,7 +229,6 @@
         </div>
     </div>
 
-    <!-- Delete Prompt Modal -->
     <div class="modal" id="deleteModal">
         <div class="modal-content">
             <div class="modal-header">Confirm Deletion</div>
@@ -218,18 +242,32 @@
         </div>
     </div>
 
-    <!-- Reassign Category Modal -->
-    <div class="modal" id="reassignModal">
+    <div class="modal" id="reassignCategoryModal">
         <div class="modal-content">
             <div class="modal-header">Reassign Category</div>
             <div class="modal-body">
-                <p style="margin-bottom: 16px;">This category contains <strong><span id="reassignCount">0</span> prompt(s)</strong>. Please select a category to move them to:</p>
+                <p style="margin-bottom: 16px;">This category contains <strong><span id="reassignCategoryCount">0</span> prompt(s)</strong>. Please select a category to move them to:</p>
                 <label class="form-label">New Category:</label>
-                <select class="form-select" id="reassignSelect"></select>
+                <select class="form-select" id="reassignCategorySelect"></select>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelReassignBtn">Cancel</button>
-                <button class="btn btn-danger" id="confirmReassignBtn">Delete & Reassign</button>
+                <button class="btn btn-secondary" id="cancelReassignCategoryBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmReassignCategoryBtn">Delete & Reassign</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="reassignTypeModal">
+        <div class="modal-content">
+            <div class="modal-header">Reassign Type</div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px;">This type contains <strong><span id="reassignTypeCount">0</span> prompt(s)</strong>. Please select a type to move them to:</p>
+                <label class="form-label">New Type:</label>
+                <select class="form-select" id="reassignTypeSelect"></select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelReassignTypeBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmReassignTypeBtn">Delete & Reassign</button>
             </div>
         </div>
     </div>
@@ -237,11 +275,14 @@
     <script>
         let prompts = [];
         let categories = ['General'];
+        let types = ['Text', 'Structured', 'Image', 'Video', 'Audio'];
         let currentEditIndex = -1;
         let deleteIndex = -1;
         let categoryToDelete = null;
+        let typeToDelete = null;
 
-        // Elements
+        const DEFAULT_URL = 'https://raw.githubusercontent.com/xsukax/xsukax-AI-Prompts/refs/heads/main/prompts.json';
+
         const jsonUrlInput = document.getElementById('jsonUrl');
         const loadUrlBtn = document.getElementById('loadUrlBtn');
         const fileInput = document.getElementById('fileInput');
@@ -251,34 +292,50 @@
         const editorContent = document.getElementById('editorContent');
         const promptsList = document.getElementById('promptsList');
         const categoryList = document.getElementById('categoryList');
+        const typeList = document.getElementById('typeList');
         const newCategoryInput = document.getElementById('newCategoryInput');
+        const newTypeInput = document.getElementById('newTypeInput');
         const addCategoryBtn = document.getElementById('addCategoryBtn');
+        const addTypeBtn = document.getElementById('addTypeBtn');
         const totalPromptsSpan = document.getElementById('totalPrompts');
         const totalCategoriesSpan = document.getElementById('totalCategories');
+        const totalTypesSpan = document.getElementById('totalTypes');
         const notification = document.getElementById('notification');
         const deleteModal = document.getElementById('deleteModal');
-        const reassignModal = document.getElementById('reassignModal');
+        const reassignCategoryModal = document.getElementById('reassignCategoryModal');
+        const reassignTypeModal = document.getElementById('reassignTypeModal');
+        const infoBanner = document.getElementById('infoBanner');
 
-        // Event listeners
-        loadUrlBtn.addEventListener('click', loadFromUrl);
+        loadUrlBtn.addEventListener('click', () => loadFromUrl(false));
         fileInput.addEventListener('change', loadFromFile);
         addNewBtn.addEventListener('click', createNewPrompt);
         exportBtn.addEventListener('click', exportToJson);
         addCategoryBtn.addEventListener('click', addCategory);
+        addTypeBtn.addEventListener('click', addType);
         document.getElementById('cancelDeleteBtn').addEventListener('click', () => deleteModal.classList.remove('show'));
         document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
-        document.getElementById('cancelReassignBtn').addEventListener('click', () => reassignModal.classList.remove('show'));
-        document.getElementById('confirmReassignBtn').addEventListener('click', confirmReassign);
+        document.getElementById('cancelReassignCategoryBtn').addEventListener('click', () => reassignCategoryModal.classList.remove('show'));
+        document.getElementById('confirmReassignCategoryBtn').addEventListener('click', confirmReassignCategory);
+        document.getElementById('cancelReassignTypeBtn').addEventListener('click', () => reassignTypeModal.classList.remove('show'));
+        document.getElementById('confirmReassignTypeBtn').addEventListener('click', confirmReassignType);
 
         jsonUrlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') loadFromUrl();
+            if (e.key === 'Enter') loadFromUrl(false);
         });
 
         newCategoryInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') addCategory();
         });
 
-        async function loadFromUrl() {
+        newTypeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addType();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromUrl(true);
+        });
+
+        async function loadFromUrl(isAutoLoad = false) {
             const url = jsonUrlInput.value.trim();
             if (!url) {
                 showNotification('Error', 'Please enter a valid URL', 'error');
@@ -290,7 +347,13 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
                 loadPromptsData(data);
-                showNotification('Success', 'Prompts loaded from URL', 'success');
+                
+                if (isAutoLoad && url === DEFAULT_URL) {
+                    infoBanner.style.display = 'flex';
+                    showNotification('Success', 'Prompts loaded automatically', 'success');
+                } else {
+                    showNotification('Success', 'Prompts loaded from URL', 'success');
+                }
             } catch (error) {
                 showNotification('Error', `Failed to load: ${error.message}`, 'error');
             }
@@ -329,10 +392,11 @@
             prompts = data.map((item, index) => ({
                 title: item.title || `Untitled Prompt ${index + 1}`,
                 prompt: item.prompt || '',
-                category: item.category || 'General'
+                category: item.category || 'General',
+                type: item.type || 'Text'
             }));
 
-            extractCategories();
+            extractCategoriesAndTypes();
             updateUI();
             exportBtn.disabled = false;
             
@@ -341,11 +405,17 @@
             }
         }
 
-        function extractCategories() {
+        function extractCategoriesAndTypes() {
             const categorySet = new Set(prompts.map(p => p.category));
+            const typeSet = new Set(prompts.map(p => p.type));
             categories = Array.from(categorySet).sort();
+            types = Array.from(typeSet).sort();
+            
             if (categories.length === 0) {
                 categories = ['General'];
+            }
+            if (types.length === 0) {
+                types = ['Text'];
             }
         }
 
@@ -370,6 +440,27 @@
             showNotification('Success', `Category "${newCategory}" added`, 'success');
         }
 
+        function addType() {
+            const newType = newTypeInput.value.trim();
+            
+            if (!newType) {
+                showNotification('Error', 'Type name cannot be empty', 'error');
+                return;
+            }
+
+            if (types.includes(newType)) {
+                showNotification('Error', 'Type already exists', 'error');
+                return;
+            }
+
+            types.push(newType);
+            types.sort();
+            newTypeInput.value = '';
+            updateTypeList();
+            updateStats();
+            showNotification('Success', `Type "${newType}" added`, 'success');
+        }
+
         function deleteCategory(categoryName) {
             const promptsInCategory = prompts.filter(p => p.category === categoryName);
             
@@ -379,27 +470,51 @@
             }
 
             if (promptsInCategory.length === 0) {
-                // No prompts in category, just delete it
                 categories = categories.filter(c => c !== categoryName);
                 updateUI();
                 showNotification('Success', `Category "${categoryName}" deleted`, 'success');
             } else {
-                // Show reassignment modal
                 categoryToDelete = categoryName;
-                document.getElementById('reassignCount').textContent = promptsInCategory.length;
+                document.getElementById('reassignCategoryCount').textContent = promptsInCategory.length;
                 
-                const reassignSelect = document.getElementById('reassignSelect');
+                const reassignSelect = document.getElementById('reassignCategorySelect');
                 reassignSelect.innerHTML = categories
                     .filter(c => c !== categoryName)
                     .map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
                     .join('');
                 
-                reassignModal.classList.add('show');
+                reassignCategoryModal.classList.add('show');
             }
         }
 
-        function confirmReassign() {
-            const newCategory = document.getElementById('reassignSelect').value;
+        function deleteType(typeName) {
+            const promptsWithType = prompts.filter(p => p.type === typeName);
+            
+            if (types.length === 1) {
+                showNotification('Error', 'Cannot delete the last type', 'error');
+                return;
+            }
+
+            if (promptsWithType.length === 0) {
+                types = types.filter(t => t !== typeName);
+                updateUI();
+                showNotification('Success', `Type "${typeName}" deleted`, 'success');
+            } else {
+                typeToDelete = typeName;
+                document.getElementById('reassignTypeCount').textContent = promptsWithType.length;
+                
+                const reassignSelect = document.getElementById('reassignTypeSelect');
+                reassignSelect.innerHTML = types
+                    .filter(t => t !== typeName)
+                    .map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`)
+                    .join('');
+                
+                reassignTypeModal.classList.add('show');
+            }
+        }
+
+        function confirmReassignCategory() {
+            const newCategory = document.getElementById('reassignCategorySelect').value;
             
             prompts.forEach(prompt => {
                 if (prompt.category === categoryToDelete) {
@@ -408,9 +523,8 @@
             });
 
             categories = categories.filter(c => c !== categoryToDelete);
-            reassignModal.classList.remove('show');
+            reassignCategoryModal.classList.remove('show');
             
-            // If currently editing a prompt from deleted category, refresh the editor
             if (currentEditIndex !== -1 && prompts[currentEditIndex]) {
                 editPrompt(currentEditIndex);
             }
@@ -420,11 +534,33 @@
             categoryToDelete = null;
         }
 
+        function confirmReassignType() {
+            const newType = document.getElementById('reassignTypeSelect').value;
+            
+            prompts.forEach(prompt => {
+                if (prompt.type === typeToDelete) {
+                    prompt.type = newType;
+                }
+            });
+
+            types = types.filter(t => t !== typeToDelete);
+            reassignTypeModal.classList.remove('show');
+            
+            if (currentEditIndex !== -1 && prompts[currentEditIndex]) {
+                editPrompt(currentEditIndex);
+            }
+            
+            updateUI();
+            showNotification('Success', `Type reassigned and deleted`, 'success');
+            typeToDelete = null;
+        }
+
         function createNewPrompt() {
             prompts.push({
                 title: `New Prompt ${prompts.length + 1}`,
                 prompt: '',
-                category: categories[0] || 'General'
+                category: categories[0] || 'General',
+                type: types[0] || 'Text'
             });
             updateUI();
             exportBtn.disabled = false;
@@ -440,6 +576,10 @@
                 `<option value="${escapeHtml(cat)}" ${cat === prompt.category ? 'selected' : ''}>${escapeHtml(cat)}</option>`
             ).join('');
 
+            const typeOptions = types.map(type => 
+                `<option value="${escapeHtml(type)}" ${type === prompt.type ? 'selected' : ''}>${escapeHtml(type)}</option>`
+            ).join('');
+
             editorContent.innerHTML = `
                 <div class="editor-header">
                     <div class="editor-title">Edit Prompt</div>
@@ -453,9 +593,15 @@
                         <label class="form-label">Prompt Title</label>
                         <input type="text" class="form-input" id="titleInput" value="${escapeHtml(prompt.title)}" placeholder="Enter prompt title..." required>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" id="categoryInput">${categoryOptions}</select>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Type</label>
+                            <select class="form-select" id="typeInput">${typeOptions}</select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="categoryInput">${categoryOptions}</select>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Prompt Content</label>
@@ -478,6 +624,7 @@
         function savePrompt() {
             const title = document.getElementById('titleInput').value.trim();
             const category = document.getElementById('categoryInput').value;
+            const type = document.getElementById('typeInput').value;
             const promptText = document.getElementById('promptInput').value;
 
             if (!title) {
@@ -485,7 +632,7 @@
                 return;
             }
 
-            prompts[currentEditIndex] = { title, prompt: promptText, category };
+            prompts[currentEditIndex] = { title, prompt: promptText, category, type };
             updateUI();
             showNotification('Success', 'Prompt saved successfully', 'success');
         }
@@ -515,7 +662,7 @@
                     editPrompt(newIndex);
                 }
 
-                extractCategories();
+                extractCategoriesAndTypes();
                 updateUI();
                 showNotification('Success', 'Prompt deleted', 'success');
             }
@@ -531,11 +678,13 @@
             updateStats();
             updatePromptsList();
             updateCategoryList();
+            updateTypeList();
         }
 
         function updateStats() {
             totalPromptsSpan.textContent = prompts.length;
             totalCategoriesSpan.textContent = categories.length;
+            totalTypesSpan.textContent = types.length;
         }
 
         function updateCategoryList() {
@@ -550,16 +699,42 @@
             });
 
             categoryList.innerHTML = categories.map(cat => `
-                <div class="category-item">
-                    <span class="category-name">${escapeHtml(cat)}</span>
-                    <span class="category-count">${categoryCounts[cat] || 0}</span>
-                    <button class="category-delete" data-category="${escapeHtml(cat)}">×</button>
+                <div class="list-item">
+                    <span class="item-name">${escapeHtml(cat)}</span>
+                    <span class="item-count">${categoryCounts[cat] || 0}</span>
+                    <button class="item-delete" data-category="${escapeHtml(cat)}">×</button>
                 </div>
             `).join('');
 
-            document.querySelectorAll('.category-delete').forEach(btn => {
+            document.querySelectorAll('[data-category]').forEach(btn => {
                 btn.addEventListener('click', () => {
                     deleteCategory(btn.dataset.category);
+                });
+            });
+        }
+
+        function updateTypeList() {
+            if (types.length === 0) {
+                typeList.innerHTML = '<div style="padding: 12px; text-align: center; color: #656d76; font-size: 12px;">No types</div>';
+                return;
+            }
+
+            const typeCounts = {};
+            prompts.forEach(p => {
+                typeCounts[p.type] = (typeCounts[p.type] || 0) + 1;
+            });
+
+            typeList.innerHTML = types.map(type => `
+                <div class="list-item">
+                    <span class="item-name">${escapeHtml(type)}</span>
+                    <span class="item-count">${typeCounts[type] || 0}</span>
+                    <button class="item-delete" data-type="${escapeHtml(type)}">×</button>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('[data-type]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    deleteType(btn.dataset.type);
                 });
             });
         }
@@ -573,7 +748,10 @@
             promptsList.innerHTML = prompts.map((p, i) => `
                 <div class="prompt-item ${i === currentEditIndex ? 'active' : ''}" data-index="${i}">
                     <div class="prompt-item-title">${escapeHtml(p.title)}</div>
-                    <div class="prompt-item-category">${escapeHtml(p.category)}</div>
+                    <div class="prompt-item-meta">
+                        <span class="prompt-item-badge">${escapeHtml(p.type)}</span>
+                        <span class="prompt-item-badge">${escapeHtml(p.category)}</span>
+                    </div>
                 </div>
             `).join('');
 
