@@ -1,236 +1,316 @@
 # xsukax AI Prompts
-### Simple AI Prompt Generator
+
+A lightweight, privacy-focused web application for managing, viewing, and organizing AI prompts. This tool provides a professional interface for browsing prompt collections and editing them locally without requiring any server-side infrastructure or external dependencies.
+
+## Project Overview
+
+**xsukax AI Prompts** is a client-side web application designed to streamline the management of AI prompts for developers, researchers, and AI enthusiasts. The application consists of two primary components:
+
+1. **Prompts Viewer** (`index.html`) - A sophisticated browser interface for viewing, searching, and filtering AI prompts from JSON data sources
+2. **Prompts Editor** (`prompts_editor.html`) - A comprehensive editor for creating, modifying, and exporting prompt collections
+
+Both components operate entirely in the browser, requiring no backend infrastructure, databases, or external API calls. Users can load prompts from GitHub raw URLs or local JSON files, making it an ideal solution for open-source prompt sharing and collaborative prompt engineering.
+
+## Security and Privacy Benefits
+
+This application prioritizes user security and privacy through its architectural design:
+
+- **100% Client-Side Execution**: All processing occurs in the user's browser with no data transmission to external servers
+- **No External Dependencies**: Does not require npm packages, CDN resources, or third-party libraries that could compromise security
+- **No Data Collection**: Zero telemetry, analytics, or tracking mechanisms implemented
+- **No Authentication Required**: No user accounts, passwords, or personal information needed
+- **Local-First Architecture**: Users maintain complete control over their data, which never leaves their device unless explicitly exported
+- **CORS-Friendly Design**: Safely loads JSON data from GitHub raw URLs without exposing credentials
+- **No Server-Side Processing**: Eliminates server-side vulnerabilities and attack vectors
+- **Transparent Code**: Pure HTML, CSS, and JavaScript with no obfuscation or minification for complete code auditability
+- **Offline Capable**: Once loaded, the application can function without internet connectivity (except for loading remote JSON files)
+
+## Features and Advantages
+
+### Prompts Viewer (`index.html`)
+- **Dynamic JSON Loading**: Load prompt collections from any GitHub raw JSON URL or custom sources
+- **Advanced Filtering**: Filter prompts by category, type, and search queries simultaneously
+- **Real-Time Search**: Instant search across prompt titles, excerpts, and full content
+- **Interactive UI**: Expandable prompt cards with smooth animations and responsive design
+- **One-Click Copy**: Copy prompts to clipboard with visual feedback
+- **Statistics Dashboard**: Real-time statistics showing total prompts, categories, types, and filtered results
+- **Type Badges**: Visual categorization with color-coded badges for different prompt types (Text, Image, Audio, Video, Structured)
+- **Character and Line Count**: Detailed metadata for each prompt
+- **Mobile-Responsive**: Fully functional on desktop, tablet, and mobile devices
+- **GitHub-Inspired Design**: Professional, clean interface following modern design principles
+
+### Prompts Editor (`prompts_editor.html`)
+- **Intuitive Editor**: Full-featured form-based editor for creating and modifying prompts
+- **Category Management**: Add, edit, and delete categories with automatic prompt reassignment
+- **Type Management**: Manage prompt types (Text, Image, Video, Audio, Structured) with usage tracking
+- **JSON Import/Export**: Load existing JSON files and export modified collections
+- **Local File Support**: Import JSON files directly from your local filesystem
+- **Live Statistics**: Real-time counters for prompts, categories, and types
+- **Character Counter**: Live character count for prompt content
+- **Sidebar Navigation**: Quick access to all prompts with active state indication
+- **Form Validation**: Ensures all required fields are completed before saving
+- **Confirmation Dialogs**: Prevents accidental deletion of prompts, categories, or types
+- **Unsaved Changes Warning**: Notifies users of unsaved modifications
+
+### Common Benefits
+- **No Installation Required**: Runs directly in any modern web browser
+- **Cross-Platform Compatibility**: Works on Windows, macOS, Linux, iOS, and Android
+- **Fast Performance**: Lightweight codebase with optimized rendering
+- **Accessibility**: Keyboard navigation support and semantic HTML structure
+- **JSON Format**: Uses standard JSON for maximum compatibility and portability
+- **Version Control Friendly**: Plain JSON files integrate seamlessly with Git workflows
+- **Self-Hosting Ready**: Deploy on GitHub Pages, Netlify, Vercel, or any static hosting service
+
+## Installation Instructions
+
+### Option 1: Direct Usage (Recommended)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/xsukax/xsukax-AI-Prompts.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd xsukax-AI-Prompts
+   ```
+
+3. Open the desired HTML file in your web browser:
+   - **For viewing prompts**: Open `index.html`
+   - **For editing prompts**: Open `prompts_editor.html`
+
+### Option 2: Deploy to GitHub Pages
+1. Fork the repository on GitHub
+
+2. Go to repository Settings → Pages
+
+3. Under "Source", select the branch (usually `main`) and folder (`/root`)
+
+4. Click "Save" and wait for deployment (usually 1-2 minutes)
+
+5. Access your deployed application at:
+   ```
+   https://yourusername.github.io/xsukax-AI-Prompts/
+   ```
+
+### Option 3: Local Web Server
+For enhanced functionality (especially with local JSON files), run a local web server:
+
+```bash
+# Using Python 3
+python -m http.server 8000
+
+# Using Python 2
+python -m SimpleHTTPServer 8000
+
+# Using Node.js (requires http-server package)
+npx http-server -p 8000
+
+# Using PHP (requires php.ini configuration for optimal performance)
+php -S localhost:8000
 ```
-You are a prompt engineering expert. Transform the following casual prompt into a concise, clear, and structured version that maintains the original intent while being more specific and professional.
 
-Rules:
-- Keep it concise (2-4 sentences maximum)
-- Assign a clear role or expertise area at the beginning, Begin it with: "You are an experienced [profession/expert] with [specific expertise]..."
-- Make requirements specific and actionable
-- Preserve the original request's core intent exactly
-- Use professional language while staying accessible
-- Do not add bullet points, numbered lists, or extensive formatting
-- Focus on clarity and directness
-- Produce the response in the same language used by the user in the original prompt
-- Strictly avoid introducing any information, data, names, numbers, or assumptions not explicitly provided by the user; construct the prompt solely based on the user’s supplied inputs without conjecture or embellishment.
+Then access the application at `http://localhost:8000`
 
-Original Prompt: [WRITE HERE THE ORIGINAL USER PROMPT]
+**Note**: For PHP users, ensure your php.ini configuration allows adequate memory_limit and max_execution_time for handling large JSON files.
 
-Enhanced Prompt (provide only the improved version):
+### System Requirements
+- **Browser**: Any modern web browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
+- **Operating System**: Windows 7+, macOS 10.13+, Linux (any recent distribution), iOS 14+, Android 8+
+- **Storage**: Minimal (under 1MB for application files)
+- **Network**: Internet connection only required for loading remote JSON files
+
+## Usage Guide
+
+### Using the Prompts Viewer
+
+```mermaid
+flowchart TD
+    A[Open index.html] --> B{JSON Source?}
+    B -->|Default| C[Load from GitHub Repository]
+    B -->|Custom| D[Enter Custom GitHub Raw URL]
+    C --> E[Display Prompts]
+    D --> E
+    E --> F[Apply Filters/Search]
+    F --> G{Find Prompt?}
+    G -->|Yes| H[Click to Expand]
+    G -->|No| F
+    H --> I[Read Full Prompt]
+    I --> J[Click Copy Button]
+    J --> K[Paste in AI Tool]
 ```
+
+#### Step-by-Step Instructions:
+
+1. **Load Prompts**:
+   - The application automatically loads prompts from the default repository URL
+   - To load from a different source, paste a GitHub raw JSON URL into the input field and click "Load Prompts"
+   - Supported URL format: `https://raw.githubusercontent.com/username/repo/branch/file.json`
+
+2. **Browse Prompts**:
+   - All available prompts are displayed as cards
+   - Each card shows the title, type badge, category badge, excerpt, and metadata
+
+3. **Search and Filter**:
+   - Use the search box to find prompts by title or content
+   - Select a category from the dropdown to filter by category
+   - Select a type from the dropdown to filter by type (Text, Image, Audio, Video, Structured)
+   - Click category or type chips for quick filtering
+   - Filters can be combined for precise results
+
+4. **View Full Prompts**:
+   - Click on any prompt card to expand and view the complete prompt text
+   - The card will highlight with a blue border when active
+   - Click the same card again to collapse it
+
+5. **Copy Prompts**:
+   - Click the "Copy" button within an expanded prompt
+   - The prompt text is copied to your clipboard
+   - A "✓ Copied!" confirmation appears briefly
+
+6. **Monitor Statistics**:
+   - View total prompts, categories, and types in the statistics bar
+   - See the current count of displayed prompts based on active filters
+
+### Using the Prompts Editor
+
+```mermaid
+flowchart TD
+    A[Open prompts_editor.html] --> B{Data Source?}
+    B -->|New| C[Start with Empty Collection]
+    B -->|Existing| D[Load JSON File/URL]
+    C --> E[Manage Categories/Types]
+    D --> E
+    E --> F[Create/Edit Prompt]
+    F --> G[Fill Form Fields]
+    G --> H{Valid?}
+    H -->|No| G
+    H -->|Yes| I[Save Prompt]
+    I --> J{More Prompts?}
+    J -->|Yes| F
+    J -->|No| K[Export JSON]
+    K --> L[Download prompts.json]
+```
+
+#### Step-by-Step Instructions:
+
+1. **Initialize the Editor**:
+   - Open `prompts_editor.html` in your browser
+   - Choose to start with an empty collection or load existing data
+
+2. **Load Existing Prompts** (Optional):
+   - **From File**: Click "Load from File" and select a local JSON file
+   - **From URL**: Enter a GitHub raw JSON URL and click "Load from URL"
+
+3. **Manage Categories and Types**:
+   - **Add Category**: Type a category name in the input field under "Categories" and click "Add"
+   - **Add Type**: Type a type name in the input field under "Types" and click "Add"
+   - **Delete**: Click the "×" button next to any category or type (prompts using deleted items will need reassignment)
+
+4. **Create a New Prompt**:
+   - Click the "+ New Prompt" button in the header
+   - The editor form will appear with empty fields
+
+5. **Edit the Prompt**:
+   - **Title**: Enter a descriptive title (required)
+   - **Category**: Select from dropdown (must be added first)
+   - **Type**: Select from dropdown (must be added first)
+   - **Excerpt**: Write a brief summary (2-3 sentences recommended)
+   - **Prompt**: Enter the complete prompt text
+   - Character count updates automatically as you type
+
+6. **Save the Prompt**:
+   - Click "Save Prompt" to add it to the collection
+   - The prompt appears in the sidebar list
+   - A success notification confirms the save
+
+7. **Edit Existing Prompts**:
+   - Click any prompt in the sidebar to load it into the editor
+   - Modify any fields as needed
+   - Click "Save Prompt" to update
+
+8. **Delete a Prompt**:
+   - Load the prompt you want to delete
+   - Click "Delete Prompt"
+   - Confirm the deletion in the dialog
+
+9. **Export Your Collection**:
+   - Click "Export JSON" in the header
+   - The browser downloads a `prompts_[timestamp].json` file
+   - This file can be:
+     - Uploaded to GitHub for use with the viewer
+     - Shared with team members
+     - Imported back into the editor
+     - Version controlled with Git
+
+### JSON File Structure
+
+The application uses a standardized JSON format for prompt collections:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "Your Prompt Title",
+    "category": "Category Name",
+    "type": "Text",
+    "excerpt": "A brief description of what this prompt does",
+    "prompt": "The complete prompt text goes here"
+  }
+]
+```
+
+**Field Descriptions**:
+- `id` (number): Unique identifier for the prompt
+- `title` (string): The prompt's display title
+- `category` (string): Classification category (e.g., "Coding", "Writing", "Analysis")
+- `type` (string): Prompt type - must be one of: "Text", "Image", "Video", "Audio", "Structured"
+- `excerpt` (string): Short summary displayed in the viewer
+- `prompt` (string): The full prompt text that users will copy
+
+### Workflow Integration
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Editor as Prompts Editor
+    participant File as JSON File
+    participant Git as Git Repository
+    participant Viewer as Prompts Viewer
+    participant AI as AI Tool
+    
+    User->>Editor: Create/Edit Prompts
+    Editor->>File: Export prompts.json
+    File->>Git: Commit & Push
+    Git->>Viewer: Load via Raw URL
+    Viewer->>User: Display Prompts
+    User->>Viewer: Copy Prompt
+    Viewer->>AI: Paste in AI Tool
+    AI->>User: Generate Response
+```
+
+### Best Practices
+
+1. **Consistent Categorization**: Use clear, consistent category names across all prompts
+2. **Descriptive Titles**: Write titles that clearly indicate the prompt's purpose
+3. **Quality Excerpts**: Provide helpful excerpts that allow users to quickly identify relevant prompts
+4. **Version Control**: Commit your JSON files to Git to track changes over time
+5. **Regular Backups**: Export and backup your prompt collections regularly
+6. **Modular Organization**: Consider maintaining separate JSON files for different domains or use cases
+7. **Testing**: Always test prompts in the viewer after editing to ensure proper formatting
+8. **Collaboration**: Share your GitHub repository URL with team members for easy access
+
+## Licensing Information
+
+This project is licensed under the GNU General Public License v3.0.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests, report issues, or suggest enhancements through the GitHub repository.
+
+## Support
+
+For questions, issues, or feature requests, please open an issue on the [GitHub repository](https://github.com/xsukax/xsukax-AI-Prompts).
+
 ---
 
-### Detailed AI Prompt Generator
-```
-You are an expert prompt engineer specializing in creating comprehensive, professional prompts that maximize AI model performance and output quality.
-
-Transform the following casual prompt into a highly detailed, professional prompt following this exact structure:
-
-1. Begin with role assignment: "You are an experienced [profession/expert] with [specific expertise]..."
-2. State the request clearly with context
-3. Use "Please provide/address the following:" or similar transition
-4. List detailed requirements using bullet points or sections with:
-   - Specific deliverables
-   - Quality criteria
-   - Contextual considerations
-   - Optional variations or considerations
-5. End with: "Leverage your [expertise] to [deliver desired outcome]"
-
-Requirements:
-- Make it detailed and professional (8-15 sentences with structure)
-- Use bullet points for requirements sections
-- Emphasize expertise and comprehensive analysis
-- Include specific guidance on approach, deliverables, and quality
-- Preserve the original request's intent while significantly expanding clarity and professionalism
-- Produce the response in the same language used by the user in the original prompt.
-- Strictly avoid introducing any information, data, names, numbers, or assumptions not explicitly provided by the user; construct the prompt solely based on the user’s supplied inputs without conjecture or embellishment.
-
-Original Prompt: [WRITE HERE THE ORIGINAL USER PROMPT]
-
-Enhanced Prompt (provide only the improved version with professional structure):
-```
----
-
-### Regex Generator
-```
-You are an expert in regular expressions with extensive experience in crafting versatile and precise regex patterns for diverse data types and formats. I require your expertise to generate multiple regex options based on a user-provided string or pattern.
-Please structure your response to include:
-- A general regex pattern that matches all instances similar to the user input (e.g., all emails, all IP addresses, all URLs).
-- One or more progressively specific regex patterns that incorporate details from the user input to narrow the search scope (e.g., emails from a specific domain, IPs matching a certain numeric pattern).
-- Explanations for each regex pattern describing what it matches and how specificity increases.
-- Ensure the regex patterns are robust, efficient, and suitable for common use cases across various input types such as emails, IP addresses, URLs, hashes, or arbitrary strings.
-At the end of this prompt, the user will provide the string or example to be analyzed and used as the basis for generating these regex options.
-Leverage your deep understanding of pattern matching and regex syntax to deliver clear, adaptable, and professional regex solutions tailored to any input scenario.
-
-`email@gmail.com`
-```
----
-
-### README.md Generator
-```
-You are a seasoned software developer with extensive experience in creating comprehensive and well-structured README.md documentation for public GitHub repositories. I would like you to draft a professional and detailed README.md file for my project repository.
-
-Please ensure the README.md includes the following sections, clearly and thoroughly addressed:
-
-- Project Title: Provide a concise and descriptive title.
-- Overview: Summarize the project’s purpose, goals, and high-level description.
-- Features: List the main functionalities and key features offered.
-- Demo: Include instructions or links to a working demo or screenshots.
-- Prerequisites: Specify software, libraries, or environment requirements before installation.
-- Installation: Step-by-step guidance on how to install the project.
-- Configuration: Instructions on any necessary setup or configuration steps.
-- Usage: Examples and instructions on how to run and utilize the project.
-- Project Structure: Describe the organization of the codebase and important directories/files.
-- Testing: Explain how to execute tests and any testing tools used.
-- Roadmap: Outline planned enhancements or future features.
-- Contributing: Guidelines for external contributors including code standards and submission process.
-- Security: Information on reporting vulnerabilities and security best practices.
-- License: Specify the licensing terms under which the project is distributed.
-- Author / Maintainers: List the primary developers or maintainers.
-- Contact / Support: Provide ways to seek help or contact maintainers.
-
-Incorporate professional clarity and completeness in each section, leveraging your advanced documentation skills to produce a README.md that facilitates user understanding, developer collaboration, and project maintainability.
-
-My Github Repo: `https://github.com/user/repo`
-Demo: `https://example.com/demo`
-```
----
-
-## Image AI Prompt Generator
-```
-Original prompt: [WRITE HERE THE ORIGINAL USER PROMPT]
-
-You are a professional AI image prompt optimization expert. Your task is to rewrite simple user prompts into high-quality, structured versions for better image generation results. Regardless of what the user inputs, output only the pure rewritten result (e.g., do not include "Rewritten prompt:"), and do not use markdown symbols.
-
----
-
-## Core Rewriting Rules
-
-### Rule 1: Replace Feeling Words with Professional Terms
-
-Replace vague feeling words with professional terminology, proper nouns, brand names, or artist names. Note: the examples below are for understanding only — do not reuse them. Create original expansions based on user descriptions.
-
-| Feeling Words | Professional Terms |
-
-|---------------|-------------------|
-
-| Cinematic, vintage, atmospheric | Wong Kar-wai aesthetics, Saul Leiter style |
-
-| Film look, retro texture | Kodak Vision3 500T, Cinestill 800T |
-
-| Warm tones, soft colors | Sakura Pink, Creamy White |
-
-| Japanese fresh style | Japanese airy feel, Wabi-sabi aesthetics |
-
-| High-end design feel | Swiss International Style, Bauhaus functionalism |
-
-Term Categories:
-- People: Wong Kar-wai, Saul Leiter, Christopher Doyle, Annie Leibovitz
-- Film stocks: Kodak Vision3 500T, Cinestill 800T, Fujifilm Superia
-- Aesthetics: Wabi-sabi, Bauhaus, Swiss International Style, MUJI visual language
-
-### Rule 2: Replace Adjectives with Quantified Parameters
-
-Replace subjective adjectives with specific technical parameters and values. Note: the examples below are for understanding only — do not reuse them. Create original expansions based on user descriptions.
-
-| Adjectives | Quantified Parameters |
-
-|------------|----------------------|
-
-| Professional photography, high-end feel | 90mm lens, f/1.8, high dynamic range |
-
-| Top-down view, from above | 45-degree overhead angle |
-
-| Soft lighting | Soft side backlight, diffused light |
-
-| Blurred background | Shallow depth of field |
-
-| Tilted composition | Dutch angle |
-
-| Dramatic lighting | Volumetric light |
-
-| Ultra-wide | 16mm wide-angle lens |
-
-### Rule 3: Add Negative Constraints
-
-Add explicit prohibitions at the end of prompts to prevent unwanted elements.
-
-Common Negative Constraints:
-- No text or words allowed
-- No low-key dark lighting or strong contrast
-- No high-saturation neon colors or artificial plastic textures
-- Product must not be distorted, warped, or redesigned
-- Do not obscure the face
-
-### Rule 4: Sensory Stacking
-
-Go beyond pure visual descriptions by adding multiple sensory dimensions to bring the image to life. Note: the examples below are for understanding only — do not reuse them. Create original expansions based on user descriptions.
-
-Sensory Dimensions:
-- Visual: Color, light and shadow, composition (basics)
-- Tactile: "Texture feels tangible", "Soft and tempting", "Delicate texture"
-- Olfactory: "Aroma seems to penetrate the frame", "Exudes warm fragrance"
-- Motion: "Surface gently trembles", "Steam wisps slowly descending"
-- Temperature: "Steamy warmth", "Moist"
-
-### Rule 5: Group and Cluster
-
-For complex scenes, cluster similar information into groups using subheadings to separate different dimensions.
-
-Grouping Patterns:
-- Visual Rules
-- Lighting & Style
-- Overall Feel
-- Constraints
-
-### Rule 6: Format Adaptation
-
-Choose appropriate format based on content complexity:
-- Simple scenes (single subject): Natural language paragraphs
-- Complex scenes (multiple elements/requirements): Structured groupings
-
----
-
-## Scene Adaptation Guide
-
-Identify scene type based on user intent and choose appropriate rewriting strategy. Note: the examples below are for understanding only — do not reuse them. Create original expansions based on user descriptions.
-
-| Scene Type | Recommended Terms | Recommended Parameters | Common Constraints |
-
-|------------|------------------|----------------------|-------------------|
-
-| Product Photography | Hasselblad, Apple product aesthetics | Studio lighting, high dynamic range | No product distortion, no text watermarks |
-
-| Portrait Photography | Wong Kar-wai, Annie Leibovitz | 90mm, f/1.8, shallow depth of field | Maintain realistic facial features, preserve identity |
-
-| Food Photography | High-end culinary magazine style | 45-degree overhead, soft side light | No utensil distractions, no text |
-
-| Cinematic | Christopher Doyle, Cinestill 800T | 35mm anamorphic lens, Dutch angle | No low-key dark lighting (unless requested) |
-
-| Japanese Style | Japanese airy feel, Wabi-sabi aesthetics | High-key photography, diffused light | No high-saturation neon colors |
-
-| Design Poster | Swiss International Style, Bauhaus | Grid system, minimal color palette | Clear information hierarchy |
-
----
-
-## Example
-
-**User Input:**
-a portrait with cinematic feel
-
-**Rewritten Prompt:**
-Cinematic portrait photography, shot through rain-soaked glass at a dimly lit restaurant at night.
-
-Visual Style:
-Wong Kar-wai and Saul Leiter aesthetics. Deep saturated colors, heavy shadows. Shot with 90mm lens, f/1.8, Kodak Vision3 500T film grain.
-
-Lighting & Atmosphere:
-Neon green and red city lights refracting through raindrops in the foreground. Soft focus, dreamy, emotionally evocative. The air is filled with moisture, loneliness, and nostalgia.
-
-Constraints:
-Maintain realistic facial features. Do not alter identity characteristics.
-```
-
----
-
-
+**Created by xsukax** | [GitHub Repository](https://github.com/xsukax/xsukax-AI-Prompts)
